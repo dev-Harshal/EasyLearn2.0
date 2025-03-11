@@ -1,0 +1,41 @@
+{% extends "users/staff/base.html" %}
+
+{% block aside %}
+
+    <aside id="sidebar" class="sidebar bg-primary-subtle">
+        <ul class="sidebar-nav" id="sidebar-nav">
+            <li class="nav-item">
+                <a href="{% url "admin-index-view" %}" class="nav-link {% if request.resolver_match.url_name == 'admin-index-view' %} active bg-dark {% endif %}">
+                    <i class="bi bi-house-door-fill"></i>
+                    <span>HOME</span>
+                </a>
+            </li>
+
+            <li class="nav-heading mb-3">TEACHER</li>
+
+            <li class="nav-item mb-4">
+                <a href="{% url "admin-create-teacher-view" %}" class="nav-link {% if request.resolver_match.url_name == 'admin-create-teacher-view' %} active bg-dark text-primary {% endif %} collapsed" href="{% url "admin-create-teacher-view" %}">
+                    <i class="bi bi-person-video3"></i>
+                    <span>CREATE TEACHER</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a href="{% url 'admin-list-user-view' 'teacher' %}" class="nav-link {% if request.resolver_match.url_name == 'admin-list-user-view' and request.resolver_match.kwargs.role == 'teacher' %}active bg-dark text-primary{% endif %}">
+                    <i class="bi bi-person-lines-fill"></i>
+                    <span>LIST TEACHER'S</span>
+                </a>
+            </li>
+
+            <li class="nav-heading mb-3">STUDENT</li>
+
+            <li class="nav-item">
+                <a href="{% url 'admin-list-user-view' 'student' %}" class="nav-link {% if request.resolver_match.url_name == 'admin-list-user-view' and request.resolver_match.kwargs.role == 'student' %}active bg-dark text-primary{% endif %}">
+                    <i class="bi bi-person-lines-fill"></i>
+                    <span>LIST STUDENT'S</span>
+                </a>
+            </li>
+        </ul>
+    </aside>
+
+{% endblock aside %}

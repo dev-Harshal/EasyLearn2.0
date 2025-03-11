@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %} Register {% endblock title %}
+
+{% block content %}
+<main class="main">
+    <section class="container lg-position-relative vh-100 lg-d-flex justify-content-center align-items-center">
+        
+        <div class="lg-position-absolute top-0 start-0 text-center text-lg-start py-2">
+            <a href="{% url "index-view" %}" class="logo">
+                <span class="text-dark">
+                    <i class="bi bi-mortarboard-fill"></i>
+                    <span class="text-primary">EASY</span>
+                    LEARN
+                </span>
+            </a>
+        </div>
+
+        <div class="row d-flex justify-content-center align-items-center">
+            <div class="d-none d-lg-block col-6">
+                <img src="{% static "users/img/register.png" %}" alt="" class="w-100" alt="Register Image.">
+            </div>
+
+            <div class="col-12 col-lg-6 d-flex justify-content-center align-items-center">
+                <div class="row justify-content-lg-center">
+                    <div class="col-12 col-lg-9">
+                        <div class="card bg-transparent">
+                            <div class="card-body">
+
+                                <h5 class="card-title text-dark fs-5 mb-0 pb-2">
+                                    <i class="bi bi-person-bounding-box"></i>
+                                    CREATE ACCOUNT.
+                                </h5>
+                                <p class="card-text">
+                                    Courses designed for real-world success.<br>
+                                    Boost your career. <span class="text-primary">Start today!</span>
+                                </p>
+
+                                {% include "components/alert.html" %}
+
+                                <form id="registerForm" class="row g-3" method="post">
+                                    {% csrf_token %}
+
+                                    <div class="col-6">
+                                        <label for="firstName" class="form-label">First Name</label>
+                                        <input type="text" class="form-control" id="firstName" name="first_name" required>
+                                    </div>
+                                    <div class="col-6">
+                                        <label for="lastName" class="form-label">Last Name</label>
+                                        <input type="text" class="form-control" id="lastName" name="last_name" required>
+                                    </div>
+                                    <div class="col-12">
+                                        <label for="institute" class="form-label">Institute</label>
+                                        <input type="text" class="form-control" id="institute" name="institute" required>
+                                    </div>
+                                    <div class="col-12">
+                                        <label for="email" class="form-label">Email</label>
+                                        <input type="email" class="form-control" id="email" name="email" required>
+                                    </div>
+                                    <div class="col-6">
+                                        <label for="password" class="form-label">Password</label>
+                                        <input type="password" class="form-control" id="password" name="password" required>
+                                    </div>
+                                    <div class="col-6">
+                                        <label for="confirmPassword" class="form-label">Confirm Password</label>
+                                        <input type="password" class="form-control" id="confirmPassword" name="confirm_password" required>
+                                    </div>
+                                    <div class="col-12 text-center">
+                                        <button type="submit" class="btn btn-primary w-50">REGISTER</button>
+                                    </div>
+                                </form>
+
+                                <div class="text-center mt-3">
+                                    <p class="card-text">Already have account ? <a href="{% url "login-view" 'student' %}">Login</a></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+{% endblock content %}

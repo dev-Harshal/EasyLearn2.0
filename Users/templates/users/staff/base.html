@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+    <header id="header" class="header fixed-top d-flex align-items-center">
+
+        <div class="d-flex align-items-center justify-content-between">
+            <a href="" class="logo">
+                <span class="d-none d-lg-block text-dark">
+                    <i class="bi bi-mortarboard-fill"></i>
+                    <span class="text-primary">EASY</span>
+                    LEARN
+                </span>
+            </a>
+            <i class="bi bi-list toggle-sidebar-btn"></i>
+        </div>
+
+        <span class="badge text-primary-emphasis w-100 fs-6 py-3 d-none d-md-block">
+            {{request.user.role|upper}} PANEL
+        </span>
+
+        <nav class="header-nav ms-auto">
+            <ul class="d-flex align-items-center">
+
+                <li class="nav-item dropdown pe-3">
+
+                    <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
+                        {% if request.user.profile_photo %}
+                            <img src="{{request.user.profile_photo.url}}" alt="Profile Picture" class="rounded-circle" style="width:35px; height:35px; object-position: center;">
+                        {% else %}
+                            <img src="{% static "users/img/profile.jpg" %}" alt="Profile Picture" class="rounded-circle" style="width:25px; height:25px; object-position: center;">
+                        {% endif %}
+                        <span class="d-none d-md-block dropdown-toggle ps-2 fs-5">{{request.user.first_name}} {{request.user.last_name.0}}</span>
+                    </a>
+
+                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+                        <li class="dropdown-header">
+                            <h6>{{request.user.first_name}} {{request.user.last_name}}</h6>
+                            <span>{{request.user.email}}</span>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center" href="{% url "staff-profile-view" request.user.role %}">
+                                <i class="bi bi-person"></i>
+                                <span>My Profile</span>
+                            </a>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center" href="{% url "logout-view" %}">
+                                <i class="bi bi-box-arrow-right"></i>
+                                <span>Sign Out</span>
+                            </a>
+                        </li>
+
+                    </ul><!-- End Profile Dropdown Items -->
+                </li>
+
+            </ul>
+        </nav>
+
+    </header>
+
+    {% block aside %}{% endblock aside %}
+
+    {% block main %}{% endblock main %}
+
+    <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+{% endblock content %}

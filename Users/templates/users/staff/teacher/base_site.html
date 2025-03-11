@@ -1,0 +1,43 @@
+{% extends "users/staff/base.html" %}
+{% load static %}
+
+{% block aside %}
+
+    <aside id="sidebar" class="sidebar bg-primary-subtle">
+        <ul class="sidebar-nav" id="sidebar-nav">
+            <li class="nav-item">
+                <a href="{% url "teacher-index-view" %}" class="nav-link {% if request.resolver_match.url_name == 'teacher-index-view' %} active bg-dark {% endif %}">
+                    <i class="bi bi-house-door-fill"></i>
+                    <span>HOME</span>
+                </a>
+            </li>
+
+            <li class="nav-heading">COURSES</li>
+
+            <li class="nav-item mb-4">
+                <a class="nav-link {% if request.resolver_match.url_name == 'create-course-view' %} active bg-dark text-primary {% endif %} collapsed" href="{% url "create-course-view" %}">
+                    <i class="bi bi-journal-bookmark-fill"></i>
+                    <span>CREATE COURSE</span>
+                </a>
+            </li>
+
+            <li class="nav-item mt-4">
+                <a class="nav-link {% if request.resolver_match.url_name == 'list-courses-view' %} active bg-dark text-primary {% endif %} collapsed" href="{% url "list-courses-view" %}">
+                    <i class="bi bi-journal-text"></i>
+                    <span>LIST COURSE'S</span>
+                </a>
+            </li>
+
+            <li class="nav-heading">STUDENT</li>
+
+            <li class="nav-item">
+                <a href="{% url 'teacher-list-student-view' %}" class="nav-link {% if request.resolver_match.url_name == 'admin-list-user-view' %}active bg-dark text-primary{% endif %}">
+                    <i class="bi bi-person-lines-fill"></i>
+                    <span>LIST STUDENT'S</span>
+                </a>
+            </li>
+        </ul>
+    </aside>
+
+{% endblock aside %}
+
