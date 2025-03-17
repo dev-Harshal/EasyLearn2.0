@@ -375,6 +375,156 @@ if (saveCurriculumForm) {
 }
 
 
+// EXAM QUESTIONS 
+
+function createQuestionField(order) {
+    return `
+        <div class="col-12 question-item" data-question-number="${order}">
+            <div class="row">
+
+                <div class="col-11">
+
+                    <div class="row g-3 justify-content-end">
+                        <div class="col-12">
+                            <div class="row">
+                                <label class="col-sm-2 col-form-label question-label">(${order}) Question :</label>
+                                <div class="col-sm-7">
+                                    <input type="text" class="form-control" name="question[]" required>
+                                </div>
+                                <div class="col-sm-3">
+                                    <input type="number" class="form-control" name="mark[]" placeholder="Marks" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Options -->
+                        <div class="col-10">
+                            <div class="row g-2">
+                                ${createAnswerField(order, 1)}
+                                ${createAnswerField(order, 2)}
+                                ${createAnswerField(order, 3)}
+                                ${createAnswerField(order, 4)}
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+
+                <div class="col-1 text-center">
+                    <i class="bi bi-trash text-danger fs-5 remove-question"></i>
+                </div>
+            </div>
+
+        </div>
+    `;
+}
+
+function createAnswerField(order, number) {
+    return `
+        <div class="col-6">
+            <div class="row">
+                <label class="col-sm-2 col-form-label">${number} :</label>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control" name="answer[${order}][]" required>
+                </div>
+                <div class="col-sm-2">
+                    <input type="radio" name="is_correct[${order}][]" value="${number}" class="form-check-input" required>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+// Update question count globally
+let questionCount = document.querySelectorAll('.question-item').length || 0;
+
+const examContainer = document.getElementById("examContainer");
+
+if (examContainer) {
+    // Ensure at least one question is added
+    if (questionCount === 0) {
+        questionCount++;
+        examContainer.innerHTML += createQuestionField(questionCount);    
+    }
+
+    // Event listener for removing questions
+    examContainer.addEventListener('click', function(event) {
+        if (event.target && event.target.classList.contains("remove-question")) {
+            event.target.closest('.question-item').remove();
+            updateQuestionNumbers();
+        }
+    });
+}
+
+// Add new question functionality
+const addQuestion = document.getElementById("addQuestion");
+if (addQuestion) {
+    addQuestion.addEventListener("click", function(event) {
+        event.preventDefault();  // Prevent page reload
+
+        questionCount++;
+        const newQuestion = createQuestionField(questionCount);
+        examContainer.insertAdjacentHTML('beforeend', newQuestion);
+        scrollToElement(document.querySelector(`[data-question-number="${questionCount}"]`));
+    });
+}
+
+// Update question numbers after removing or reordering
+function updateQuestionNumbers() {
+    const questions = document.querySelectorAll(".question-item");
+
+    questions.forEach((question, index) => {
+        let newQuestionNumber = index + 1;
+        question.setAttribute('data-question-number', newQuestionNumber);
+
+        // Update question label
+        const questionLabel = question.querySelector(".question-label");
+        if (questionLabel) {
+            questionLabel.textContent = `(${newQuestionNumber}) Question :`;
+        }
+
+
+        // Update answer fields
+        const answers = question.querySelectorAll(`input[name^="answer"]`);
+        answers.forEach((answer) => {
+            answer.name = `answer[${newQuestionNumber}][]`;
+        });
+
+        // Update correct answer radios
+        const correctAnswerRadios = question.querySelectorAll(`input[name^="is_correct"]`);
+        correctAnswerRadios.forEach((radio) => {
+            radio.name = `is_correct[${newQuestionNumber}][]`;
+        });
+
+    });
+}
+
+// Form submission with fetch
+const createQuestionForm = document.getElementById('createQuestionForm');
+if (createQuestionForm) {
+    createQuestionForm.addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const id = document.getElementById('id').value;
+        const url = `/teacher/detail/exam/${id}/`;
+
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': document.querySelector('input[name="csrfmiddlewaretoken"]').value,
+            },
+            body: new FormData(createQuestionForm),
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                window.location.href = data.success_url;
+            } else {
+                popAlert(data);
+            }
+        });
+    });
+}
 
 
 

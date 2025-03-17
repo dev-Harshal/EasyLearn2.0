@@ -90,6 +90,42 @@ class QuizOption(models.Model):
         db_table = 'Quiz Options Table'
 
 
+class Exam(models.Model):
+    id = models.BigAutoField(primary_key=True)
+    course = models.OneToOneField(Course, related_name='exam', on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.id
+
+    class Meta:
+        db_table = 'Exams Table'
+
+class Question(models.Model):
+    id = models.BigAutoField(primary_key=True)
+    exam = models.ForeignKey(Exam, related_name='questions', on_delete=models.CASCADE)
+    text = models.CharField(max_length=255, null=False, blank=False)
+    mark = models.PositiveIntegerField(null=False, blank=False, default=0)
+
+    def __str__(self):
+        return self.text
+
+    class Meta:
+        db_table = 'Questions Table'
+
+class Answer(models.Model):
+    id = models.BigAutoField(primary_key=True)
+    question = models.ForeignKey(Question, related_name='answers', on_delete=models.CASCADE)
+    text = models.CharField(max_length=100, null=False, blank=False)
+    is_correct = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.text
+
+    class Meta:
+        db_table = 'Answers Table'
+
+
+
 
 
     

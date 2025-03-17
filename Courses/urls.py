@@ -8,4 +8,8 @@ urlpatterns = [
     path('delete/course/<int:id>/', delete_course_view, name='delete-course-view'),
     path('list/courses/', list_courses_view, name='list-courses-view'),
     path('save/curriculum/<int:id>/', save_curriculum_view, name='save-curriculum-view'),
+
+    # EXAM
+
+    path('detail/exam/<int:id>/', detail_exam_view, name='detail-exam-view')
 ]

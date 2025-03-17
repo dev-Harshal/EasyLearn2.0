@@ -130,7 +130,32 @@ def save_curriculum_view(request, id):
             messages.success(request, f'Course Curriculum for {course.title} saved successfully.')
             return JsonResponse({'status': 'success', 'success_url': f'/teacher/detail/course/{course.id}/'}, status=200)
         except Exception as e:
-            print("HERE",e)
             return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
     else:
         return JsonResponse({'status': 'error', 'message': 'Invalid request method'}, status=405)
+    
+def detail_exam_view(request, id):   
+    course = Course.objects.get(id=id)
+    exam, created = Exam.objects.get_or_create(course=course)
+
+    if request.method == 'POST':
+        try:
+
+            questions = request.POST.getlist('question[]')
+            marks = request.POST.getlist('mark[]')
+            total_marks = sum(int(mark) for mark in marks if mark.isdigit())
+
+            if total_marks > 70:
+                return JsonResponse({'status':'error', 'message':f'Sum of Total Marks should not exceed 70 Marks. (Current: {total_marks})'})
+            exam.questions.all().delete()
+            for i, (text,mark) in enumerate(zip(questions, marks)):
+                question = Question.objects.create(exam=exam, text=text,mark=mark)
+                for anwser_number in range(1, 5):
+                    answer_text = request.POST.get(f'answer[{i+1}][]')
+                    is_correct = request.POST.get(f'is_correct[{i+1}][]') == str(anwser_number)
+                    Answer.objects.create(question=question, text=answer_text, is_correct=is_correct)
+            messages.success(request, f'Exam Questions for {course} created successfully.')
+            return JsonResponse({'status': 'success', 'success_url': f'/teacher/detail/exam/{course.id}/'}, status=200)
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
+    return render(request, 'exam/detail_exam.html', context={'exam':exam})
