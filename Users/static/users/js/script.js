@@ -33,6 +33,13 @@ function popAlert(data) {
     },3000)
 }
 
+alertBox = document.getElementById('alert')
+if (alertBox) {
+    setTimeout(function() {
+        alertBox.style.display = 'none';
+    }, 5000);
+}
+
 const resendButton = document.getElementById('resendBtn');
 if (resendButton){
     resendButton.addEventListener('click', function(event) {
